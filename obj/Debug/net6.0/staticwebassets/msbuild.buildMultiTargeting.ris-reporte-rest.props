@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\ris-reporte-rest.props" />
+</Project>
