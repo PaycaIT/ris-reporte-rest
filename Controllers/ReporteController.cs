@@ -83,6 +83,43 @@ namespace ris_reporte_rest.Controllers
             return response;
         }
 
+        [Route("desktop/buscarDetalleRuta")]
+        [HttpGet] // Cambia a [HttpGet]
+        [EnableCors("MyPolicy")]
+        public ResponseBuscarDetalleRuta buscarDetalleRuta([FromQuery] int idEjecucion)
+        {
+            _logger.LogInformation("buscarDetalleRuta inició...");
+            ResponseBuscarDetalleRuta response = new ResponseBuscarDetalleRuta();
+            try
+            {
+                RequestBuscarDetalleRutaBody request = new RequestBuscarDetalleRutaBody { idEjecucion = idEjecucion };
+                response = dao.buscarDetalleRuta(request);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error en buscarDetalleRuta " + ex.Message, ex);
+            }
+            return response;
+        }
+
         //faltan 2 metodos que migrar del servicio reporte
+        [Route("desktop/buscarHistoriaEquipo")]
+        [HttpGet] // Cambia a [HttpGet]
+        [EnableCors("MyPolicy")]
+        public ResponseBuscarHistoriaEquipo buscarHistoriaEquipo([FromQuery] long idComplejo, [FromQuery] long idCentral, [FromQuery] long idRuta, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin, [FromQuery] bool var_critica)
+        {
+            _logger.LogInformation("buscarHistoriaEquipo inició...");
+            ResponseBuscarHistoriaEquipo response = new ResponseBuscarHistoriaEquipo();
+            try
+            {
+                RequestBuscarHistoriaEquipoBody request = new RequestBuscarHistoriaEquipoBody { idComplejo = idComplejo, idCentral = idCentral, idRuta = idRuta, idEquipo = idEquipo, fechaInicio = fechaInicio, fechaFin = fechaFin, var_critica = var_critica};
+                response = dao.buscarHistoriaEquipo(request);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error en buscarHistoriaEquipo " + ex.Message, ex);
+            }
+            return response;
+        }
     }
 }
