@@ -1,7 +1,6 @@
-﻿using InterceptorSicap.cl.colbun.session.to;
-using System.ServiceModel;
+﻿using System.ServiceModel;
 
-namespace ReporteWS.cl.colbun.sicap.to.request
+namespace ris_reporte_rest.Models
 {
     [MessageContract]
     public class RequestBuscarBitacora

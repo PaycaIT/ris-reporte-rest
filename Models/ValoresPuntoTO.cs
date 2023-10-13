@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ReporteWS.cl.colbun.sicap.to.response
+namespace ris_reporte_rest.Models
 {
     public class ValoresPuntoTO
     {

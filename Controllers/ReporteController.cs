@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using ReporteWS.cl.colbun.sicap.to.request;
-using ReporteWS.cl.colbun.sicap.to.response;
 using ris_reporte_rest.DAO;
 using ris_reporte_rest.DataAccess;
+using ris_reporte_rest.Models;
 
 namespace ris_reporte_rest.Controllers
 {

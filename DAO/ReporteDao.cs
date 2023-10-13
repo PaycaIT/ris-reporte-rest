@@ -1,11 +1,7 @@
 ﻿using Dapper;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using ReporteWS.cl.colbun.sicap.to.request;
-using ReporteWS.cl.colbun.sicap.to.response;
 using ris_reporte_rest.DataAccess;
 using ris_reporte_rest.Models;
 using System.Data;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ris_reporte_rest.DAO
 {

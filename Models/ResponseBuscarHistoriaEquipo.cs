@@ -1,6 +1,6 @@
 ﻿using System.ServiceModel;
 
-namespace ReporteWS.cl.colbun.sicap.to.response
+namespace ris_reporte_rest.Models
 {
     [MessageContract]
     public class ResponseBuscarHistoriaEquipo

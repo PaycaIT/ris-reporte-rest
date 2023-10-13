@@ -1,4 +1,4 @@
-﻿namespace ris_complejo_rest.Models
+﻿namespace ris_reporte_rest.Models
 {
     public class ErrorTO
     {

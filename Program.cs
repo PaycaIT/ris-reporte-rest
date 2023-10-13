@@ -1,6 +1,4 @@
-using ris_reporte_rest;
-
-namespace ris_complejo_rest
+namespace ris_reporte_rest
 {
     public class Program
     {

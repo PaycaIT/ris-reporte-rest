@@ -1,4 +1,4 @@
-﻿namespace ReporteWS.cl.colbun.sicap.to.request
+﻿namespace ris_reporte_rest.Models
 {
     public class RequestBuscarAlertasBody
     {

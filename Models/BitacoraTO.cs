@@ -1,4 +1,4 @@
-﻿namespace ReporteWS.cl.colbun.sicap.to.response
+﻿namespace ris_reporte_rest.Models
 {
     public class BitacoraTO
     {
