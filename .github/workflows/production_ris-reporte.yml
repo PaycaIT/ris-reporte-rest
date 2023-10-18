@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'ris-reporte'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E94F4275689442BB9236EAB9AE366E3D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5AEC32CE918E4AFD92DF99955A39C04E }}
           package: .
