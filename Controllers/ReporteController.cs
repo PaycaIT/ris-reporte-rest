@@ -25,7 +25,7 @@ namespace ris_reporte_rest.Controllers
             this.dao = new ReporteDao(dapper);
         }
 
-        [Route("desktop/buscarBitacora")]
+        [Route("buscarBitacora")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
         public ResponseBuscarBitacora buscarBitacora([FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
@@ -44,7 +44,7 @@ namespace ris_reporte_rest.Controllers
             return response;
         }
 
-        [Route("desktop/buscarRutas")]
+        [Route("buscarRutas")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
         public ResponseBuscarRutas buscarRutas([FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] bool mant_ope, [FromQuery] string estado, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
@@ -63,7 +63,7 @@ namespace ris_reporte_rest.Controllers
             return response;
         }
 
-        [Route("desktop/buscarAlertas")]
+        [Route("buscarAlertas")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
         public ResponseBuscarAlertas buscarAlertas([FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] long idUsuario, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
@@ -82,7 +82,7 @@ namespace ris_reporte_rest.Controllers
             return response;
         }
 
-        [Route("desktop/buscarDetalleRuta")]
+        [Route("buscarDetalleRuta")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
         public ResponseBuscarDetalleRuta buscarDetalleRuta([FromQuery] int idEjecucion)
@@ -102,7 +102,7 @@ namespace ris_reporte_rest.Controllers
         }
 
         //faltan 2 metodos que migrar del servicio reporte
-        [Route("desktop/buscarHistoriaEquipo")]
+        [Route("buscarHistoriaEquipo")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
         public ResponseBuscarHistoriaEquipo buscarHistoriaEquipo([FromQuery] long idComplejo, [FromQuery] long idCentral, [FromQuery] long idRuta, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin, [FromQuery] bool var_critica)
