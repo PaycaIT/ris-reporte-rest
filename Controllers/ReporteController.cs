@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ris_reporte_rest.DAO;
 using ris_reporte_rest.DataAccess;
 using ris_reporte_rest.Models;
+using System.Configuration;
 
 namespace ris_reporte_rest.Controllers
 {
@@ -22,9 +23,10 @@ namespace ris_reporte_rest.Controllers
             this._config = config;
             this._dapper = dapper;
             this._logger = logger;
+            Configuration = config;
             this.dao = new ReporteDao(dapper);
         }
-
+        public IConfiguration Configuration { get; }
         [Route("buscarBitacora")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
