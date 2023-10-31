@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ris_reporte_rest.DAO;
 using ris_reporte_rest.DataAccess;
+using ris_reporte_rest.Exceptions;
 using ris_reporte_rest.Models;
 using System.Configuration;
+using System.Net;
 
 namespace ris_reporte_rest.Controllers
 {
@@ -24,13 +26,13 @@ namespace ris_reporte_rest.Controllers
             this._dapper = dapper;
             this._logger = logger;
             Configuration = config;
-            this.dao = new ReporteDao(dapper);
+            this.dao = new ReporteDao(dapper, logger);
         }
         public IConfiguration Configuration { get; }
         [Route("buscarBitacora")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public ResponseBuscarBitacora buscarBitacora([FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
+        public IActionResult buscarBitacora([FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
         {
             _logger.LogInformation("buscarBitacora inició...");
             ResponseBuscarBitacora response = new ResponseBuscarBitacora();
@@ -39,17 +41,24 @@ namespace ris_reporte_rest.Controllers
                 RequestBuscarBitacoraBody request = new RequestBuscarBitacoraBody { idComplejo = idComplejo, idCentral = idCentral, fechaInicio = fechaInicio, fechaFin = fechaFin };
                 response.listaBitacora = dao.buscarBitacora(request);
             }
+            catch (GestionReporteException ex)
+            {
+                this._logger.LogError("Error en buscarBitacora: " + ex.action, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorTO(ex.code, ex.userMessage));
+            }
             catch (Exception ex)
             {
-                _logger.LogError("Error en buscarBitacora " + ex.Message, ex);
+                this._logger.LogError("Error en buscarBitacora: " + ex.Message, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorTO(TiposErrores.CODE_ERROR_NO_CONTROLADO, ex.Message));
             }
-            return response;
+
+            return StatusCode((int)HttpStatusCode.OK, response);
         }
 
         [Route("buscarRutas")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public ResponseBuscarRutas buscarRutas([FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] bool mant_ope, [FromQuery] string estado, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
+        public IActionResult buscarRutas([FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] bool mant_ope, [FromQuery] string estado, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
         {
             _logger.LogInformation("buscarRutas inició...");
             ResponseBuscarRutas response = new ResponseBuscarRutas();
@@ -58,17 +67,24 @@ namespace ris_reporte_rest.Controllers
                 RequestBuscarRutasBody request = new RequestBuscarRutasBody { idComplejo = idComplejo, idCentral = idCentral, mant_ope = mant_ope, estado = estado, fechaInicio = fechaInicio, fechaFin = fechaFin };
                 response.listaRutas = dao.buscarRutas(request);
             }
+            catch (GestionReporteException ex)
+            {
+                this._logger.LogError("Error en buscarRutas: " + ex.action, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorTO(ex.code, ex.userMessage));
+            }
             catch (Exception ex)
             {
-                _logger.LogError("Error en buscarRutas " + ex.Message, ex);
+                this._logger.LogError("Error en buscarRutas: " + ex.Message, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorTO(TiposErrores.CODE_ERROR_NO_CONTROLADO, ex.Message));
             }
-            return response;
+
+            return StatusCode((int)HttpStatusCode.OK, response);
         }
 
         [Route("buscarAlertas")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public ResponseBuscarAlertas buscarAlertas([FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] long idUsuario, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
+        public IActionResult buscarAlertas([FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] long idUsuario, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
         {
             _logger.LogInformation("buscarAlertas inició...");
             ResponseBuscarAlertas response = new ResponseBuscarAlertas();
@@ -77,17 +93,24 @@ namespace ris_reporte_rest.Controllers
                 RequestBuscarAlertasBody request = new RequestBuscarAlertasBody { idComplejo = idComplejo, idCentral = idCentral, idUsuario = idUsuario, idEquipo = idEquipo, fechaInicio = fechaInicio, fechaFin = fechaFin };
                 response.listaAlertas = dao.buscarAlertas(request);
             }
+            catch (GestionReporteException ex)
+            {
+                this._logger.LogError("Error en buscarAlertas: " + ex.action, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorTO(ex.code, ex.userMessage));
+            }
             catch (Exception ex)
             {
-                _logger.LogError("Error en buscarAlertas " + ex.Message, ex);
+                this._logger.LogError("Error en buscarAlertas: " + ex.Message, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorTO(TiposErrores.CODE_ERROR_NO_CONTROLADO, ex.Message));
             }
-            return response;
+
+            return StatusCode((int)HttpStatusCode.OK, response);
         }
 
         [Route("buscarDetalleRuta")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public ResponseBuscarDetalleRuta buscarDetalleRuta([FromQuery] int idEjecucion)
+        public IActionResult buscarDetalleRuta([FromQuery] int idEjecucion)
         {
             _logger.LogInformation("buscarDetalleRuta inició...");
             ResponseBuscarDetalleRuta response = new ResponseBuscarDetalleRuta();
@@ -96,18 +119,25 @@ namespace ris_reporte_rest.Controllers
                 RequestBuscarDetalleRutaBody request = new RequestBuscarDetalleRutaBody { idEjecucion = idEjecucion };
                 response = dao.buscarDetalleRuta(request);
             }
+            catch (GestionReporteException ex)
+            {
+                this._logger.LogError("Error en buscarDetalleRuta: " + ex.action, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorTO(ex.code, ex.userMessage));
+            }
             catch (Exception ex)
             {
-                _logger.LogError("Error en buscarDetalleRuta " + ex.Message, ex);
+                this._logger.LogError("Error en buscarDetalleRuta: " + ex.Message, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorTO(TiposErrores.CODE_ERROR_NO_CONTROLADO, ex.Message));
             }
-            return response;
+
+            return StatusCode((int)HttpStatusCode.OK, response);
         }
 
         //faltan 2 metodos que migrar del servicio reporte
         [Route("buscarHistoriaEquipo")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public ResponseBuscarHistoriaEquipo buscarHistoriaEquipo([FromQuery] long idComplejo, [FromQuery] long idCentral, [FromQuery] long idRuta, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin, [FromQuery] bool var_critica)
+        public IActionResult buscarHistoriaEquipo([FromQuery] long idComplejo, [FromQuery] long idCentral, [FromQuery] long idRuta, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin, [FromQuery] bool var_critica)
         {
             _logger.LogInformation("buscarHistoriaEquipo inició...");
             ResponseBuscarHistoriaEquipo response = new ResponseBuscarHistoriaEquipo();
@@ -116,11 +146,18 @@ namespace ris_reporte_rest.Controllers
                 RequestBuscarHistoriaEquipoBody request = new RequestBuscarHistoriaEquipoBody { idComplejo = idComplejo, idCentral = idCentral, idRuta = idRuta, idEquipo = idEquipo, fechaInicio = fechaInicio, fechaFin = fechaFin, var_critica = var_critica};
                 response = dao.buscarHistoriaEquipo(request);
             }
+            catch (GestionReporteException ex)
+            {
+                this._logger.LogError("Error en buscarHistoriaEquipo: " + ex.action, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorTO(ex.code, ex.userMessage));
+            }
             catch (Exception ex)
             {
-                _logger.LogError("Error en buscarHistoriaEquipo " + ex.Message, ex);
+                this._logger.LogError("Error en buscarHistoriaEquipo: " + ex.Message, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorTO(TiposErrores.CODE_ERROR_NO_CONTROLADO, ex.Message));
             }
-            return response;
+
+            return StatusCode((int)HttpStatusCode.OK, response);
         }
     }
 }

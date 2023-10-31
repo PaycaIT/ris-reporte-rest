@@ -2,9 +2,14 @@
 {
     public class ErrorTO
     {
-        public ErrorTO() {
-            this.mensaje = "OK";
-            this.codigo = 0;
+        public ErrorTO()
+        {
+            mensaje = "OK";
+        }
+        public ErrorTO(int codigo, string mensaje)
+        {
+            this.codigo = codigo;
+            this.mensaje = mensaje;
         }
         public string mensaje { get; set; }
         public int codigo { get; set; }
