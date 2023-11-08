@@ -1,13 +1,12 @@
-
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - qa-ris-reporte
+name: Build and deploy ASP.Net Core app to Azure Web App - ris-reporte
 
 on:
   push:
     branches:
-      - testing
+      - production
   workflow_dispatch:
 
 jobs:
@@ -44,11 +43,11 @@ jobs:
 
     steps:
       - name: Login Azure
-        run: az login --service-principal -u "${{ vars.AZURE_SP_APPID_QA }}" -p "${{ secrets.AZURE_SP_PASS_QA }}" --tenant "${{ vars.AZURE_SP_TNT_QA }}"
+        run: az login --service-principal -u "${{ vars.AZURE_SP_APPID }}" -p "${{ secrets.AZURE_SP_PASS }}" --tenant "${{ vars.AZURE_SP_TNT }}"
         
       - name: Set Azure environment variables
-        run: az webapp config appsettings set --resource-group ${{ vars.AZURE_GROUP_APP_QA }} --name ${{ vars.AZURE_NAME_APP_QA }} --settings "DDBB_SERVER=${{ vars.DDBB_SERVER_QA }}" "DDBB_USER=${{ secrets.DDBB_USER_QA }}" "DDBB_PASS=${{ secrets.DDBB_PASS_QA }}"
-      
+        run: az webapp config appsettings set --resource-group ${{ vars.AZURE_GROUP_APP }} --name ${{ vars.AZURE_NAME_APP }} --settings "DDBB_SERVER=${{ vars.DDBB_SERVER }}" "DDBB_USER=${{ secrets.DDBB_USER }}" "DDBB_PASS=${{ secrets.DDBB_PASS }}"
+    
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
@@ -58,8 +57,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'qa-ris-reporte'
+          app-name: 'ris-reporte'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3377B56EAC5C4A2DAA78A1769EB9F868 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5AEC32CE918E4AFD92DF99955A39C04E }}
           package: .
-
