@@ -1,0 +1,63 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy ASP.Net Core app to Azure Web App - ris-reporte
+
+on:
+  push:
+    branches:
+      - production
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Login Azure
+        run: az login --service-principal -u "${{ vars.AZURE_SP_APPID }}" -p "${{ secrets.AZURE_SP_PASS }}" --tenant "${{ vars.AZURE_SP_TNT }}"
+        
+      - name: Set Azure environment variables
+        run: az webapp config appsettings set --resource-group ${{ vars.AZURE_GROUP_APP }} --name ${{ vars.AZURE_NAME_APP }} --settings "DDBB_SERVER=${{ vars.DDBB_SERVER }}" "DDBB_USER=${{ secrets.DDBB_USER }}" "DDBB_PASS=${{ secrets.DDBB_PASS }}"
+    
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'ris-reporte'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5AEC32CE918E4AFD92DF99955A39C04E }}
+          package: .
