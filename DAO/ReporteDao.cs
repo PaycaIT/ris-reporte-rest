@@ -1,7 +1,9 @@
 ﻿using Dapper;
 using ris_reporte_rest.DataAccess;
 using ris_reporte_rest.Exceptions;
-using ris_reporte_rest.Models;
+using ris_reporte_rest.Models.Requests;
+using ris_reporte_rest.Models.Responses;
+using ris_reporte_rest.Models.TO;
 using System.Data;
 
 namespace ris_reporte_rest.DAO
@@ -33,7 +35,7 @@ namespace ris_reporte_rest.DAO
             {
                 _logger.LogError("Error al buscar bitacora", ex);
                 GestionReporteException connectionFault = new GestionReporteException();
-                connectionFault.code = TiposErrores.CODE_ERROR_BUSCAR_BITACORA;
+                connectionFault.code = TiposErrores.CODE_ERROR_OBTENER_BITACORA;
                 connectionFault.userMessage = ex.Message;
                 connectionFault.action = "Error al buscar bitacora (Dao): ";
                 throw connectionFault;
@@ -91,7 +93,7 @@ namespace ris_reporte_rest.DAO
             {
                 _logger.LogError("Error al buscar rutas", ex);
                 GestionReporteException connectionFault = new GestionReporteException();
-                connectionFault.code = TiposErrores.CODE_ERROR_BUSCAR_RUTAS_REPORTE;
+                connectionFault.code = TiposErrores.CODE_ERROR_OBTENER_RUTAS_REPORTE;
                 connectionFault.userMessage = ex.Message;
                 connectionFault.action = "Error al buscar rutas (Dao): ";
                 throw connectionFault;
@@ -118,7 +120,7 @@ namespace ris_reporte_rest.DAO
             {
                 _logger.LogError("Error al cargar puntos equipo", ex);
                 GestionReporteException connectionFault = new GestionReporteException();
-                connectionFault.code = TiposErrores.CODE_ERROR_CARGAR_PUNTOS_EQUIPO;
+                connectionFault.code = TiposErrores.CODE_ERROR_GARGAR_PUNTOS_EQUIPO;
                 connectionFault.userMessage = ex.Message;
                 connectionFault.action = "Error al cargar puntos equipo (Dao): ";
                 throw connectionFault;
@@ -180,7 +182,7 @@ namespace ris_reporte_rest.DAO
             {
                 _logger.LogError("Error al buscar alertas", ex);
                 GestionReporteException connectionFault = new GestionReporteException();
-                connectionFault.code = TiposErrores.CODE_ERROR_BUSCAR_ALERTAS;
+                connectionFault.code = TiposErrores.CODE_ERROR_OBTENER_ALERTAS;
                 connectionFault.userMessage = ex.Message;
                 connectionFault.action = "Error al buscar alertas (Dao): ";
                 throw connectionFault;
@@ -231,7 +233,7 @@ namespace ris_reporte_rest.DAO
             {
                 _logger.LogError("Error al buscar detalle ruta", ex);
                 GestionReporteException connectionFault = new GestionReporteException();
-                connectionFault.code = TiposErrores.CODE_ERROR_BUSCAR_DETALLE_RUTA;
+                connectionFault.code = TiposErrores.CODE_ERROR_OBTENER_DETALLE_RUTA;
                 connectionFault.userMessage = ex.Message;
                 connectionFault.action = "Error al buscar detalle ruta (Dao): ";
                 throw connectionFault;
@@ -288,7 +290,7 @@ namespace ris_reporte_rest.DAO
             {
                 _logger.LogError("Error al buscar historia equipo", ex);
                 GestionReporteException connectionFault = new GestionReporteException();
-                connectionFault.code = TiposErrores.CODE_ERROR_BUSCAR_HISTORIA_EQUIPO;
+                connectionFault.code = TiposErrores.CODE_ERROR_OBTENER_HISTORIA_EQUIPO;
                 connectionFault.userMessage = ex.Message;
                 connectionFault.action = "Error al buscar historia equipo (Dao): ";
                 throw connectionFault;

@@ -1,4 +1,4 @@
-﻿namespace ris_reporte_rest.Models
+﻿namespace ris_reporte_rest.Models.Requests
 {
     public class RequestBuscarDetalleRutaBody
     {

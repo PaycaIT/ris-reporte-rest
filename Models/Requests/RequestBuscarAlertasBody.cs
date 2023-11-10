@@ -1,4 +1,4 @@
-﻿namespace ris_reporte_rest.Models
+﻿namespace ris_reporte_rest.Models.Requests
 {
     public class RequestBuscarAlertasBody
     {
@@ -6,7 +6,7 @@
         public long idCentral { get; set; }
         public long idUsuario { get; set; }
         public long idEquipo { get; set; }
-        public String fechaInicio { get; set; }
-        public String fechaFin { get; set; }
+        public string fechaInicio { get; set; }
+        public string fechaFin { get; set; }
     }
 }
