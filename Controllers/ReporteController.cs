@@ -4,7 +4,6 @@ using ris_reporte_rest.DAO;
 using ris_reporte_rest.DataAccess;
 using ris_reporte_rest.Exceptions;
 using ris_reporte_rest.Helper;
-using ris_reporte_rest.Models.Requests;
 using ris_reporte_rest.Models.Responses;
 using ris_reporte_rest.Models.TO;
 using System.Configuration;
@@ -34,11 +33,12 @@ namespace ris_reporte_rest.Controllers
         [Route("obtenerBitacora")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public IActionResult obtenerBitacora([FromQuery] long idComplejo, [FromQuery] long idCentral, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
+        public IActionResult obtenerBitacora([FromHeader] String codigoUsuario, [FromHeader] String token, [FromQuery] long idComplejo, [FromQuery] long idCentral, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
         {
             ResponseBuscarBitacora response = new ResponseBuscarBitacora();
             try
             {
+                helper.validarSession(codigoUsuario, token);
                 response.listaBitacora = helper.buscarBitacora(idComplejo, idCentral, fechaInicio, fechaFin);
             }
             catch (GestionIspeccionException ex)
@@ -65,12 +65,12 @@ namespace ris_reporte_rest.Controllers
         [Route("obtenerRutas")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public IActionResult obtenerRutas([FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] bool mant_ope, [FromQuery] string estado, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
+        public IActionResult obtenerRutas([FromHeader] String codigoUsuario, [FromHeader] String token, [FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] bool mant_ope, [FromQuery] string estado, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
         {
             ResponseBuscarRutas response = new ResponseBuscarRutas();
             try
             {
-                
+                helper.validarSession(codigoUsuario, token);
                 response.listaRutas = helper.buscarRutas(idComplejo, idCentral, mant_ope, estado, fechaInicio, fechaFin);
             }
             catch (GestionIspeccionException ex)
@@ -97,12 +97,12 @@ namespace ris_reporte_rest.Controllers
         [Route("obtenerAlertas")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public IActionResult obtenerAlertas([FromQuery] long idComplejo, [FromQuery] long idCentral, [FromQuery] long idUsuario, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
+        public IActionResult obtenerAlertas([FromHeader] String codigoUsuario, [FromHeader] String token, [FromQuery] long idComplejo, [FromQuery] long idCentral, [FromQuery] long idUsuario, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
         {
             ResponseBuscarAlertas response = new ResponseBuscarAlertas();
             try
             {
-                
+                helper.validarSession(codigoUsuario, token);
                 response.listaAlertas = helper.buscarAlertas(idComplejo, idCentral, idUsuario, idEquipo, fechaInicio, fechaFin);
             }
             catch (GestionIspeccionException ex)
@@ -129,11 +129,12 @@ namespace ris_reporte_rest.Controllers
         [Route("obtenerDetalleRuta")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public IActionResult obtenerDetalleRuta([FromQuery] long idEjecucion)
+        public IActionResult obtenerDetalleRuta([FromHeader] String codigoUsuario, [FromHeader] String token, [FromQuery] long idEjecucion)
         {
             ResponseBuscarDetalleRuta response = new ResponseBuscarDetalleRuta();
             try
             {
+                helper.validarSession(codigoUsuario, token);
                 response = helper.buscarDetalleRuta(idEjecucion);
             }
             catch (GestionIspeccionException ex)
@@ -161,11 +162,12 @@ namespace ris_reporte_rest.Controllers
         [Route("obtenerHistoriaEquipo")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public IActionResult obtenerHistoriaEquipo([FromQuery] long idComplejo, [FromQuery] long idCentral, [FromQuery] long idRuta, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin, [FromQuery] bool var_critica)
+        public IActionResult obtenerHistoriaEquipo([FromHeader] String codigoUsuario, [FromHeader] String token, [FromQuery] long idComplejo, [FromQuery] long idCentral, [FromQuery] long idRuta, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin, [FromQuery] bool var_critica)
         {
             ResponseBuscarHistoriaEquipo response = new ResponseBuscarHistoriaEquipo();
             try
             {
+                helper.validarSession(codigoUsuario, token);
                 response = helper.buscarHistoriaEquipo(idComplejo, idCentral, idRuta, idEquipo, fechaInicio, fechaFin, var_critica);
             }
             catch (GestionIspeccionException ex)

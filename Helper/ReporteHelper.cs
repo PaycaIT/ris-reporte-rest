@@ -2,7 +2,6 @@
 using ris_reporte_rest.DAO;
 using ris_reporte_rest.DataAccess;
 using ris_reporte_rest.Exceptions;
-using ris_reporte_rest.Models.Requests;
 using ris_reporte_rest.Models.Responses;
 using ris_reporte_rest.Models.TO;
 
