@@ -1,7 +1,9 @@
 ﻿using Dapper;
 using ris_reporte_rest.DataAccess;
 using ris_reporte_rest.Exceptions;
-using ris_reporte_rest.Models;
+using ris_reporte_rest.Models.Requests;
+using ris_reporte_rest.Models.Responses;
+using ris_reporte_rest.Models.TO;
 using System.Data;
 
 namespace ris_reporte_rest.DAO
@@ -16,49 +18,73 @@ namespace ris_reporte_rest.DAO
             _logger = logger;
         }
 
-        public BitacoraTO[] buscarBitacora(RequestBuscarBitacoraBody request)
+
+        /* Procedimiento para validar sesión */
+        public long validarSession(String codigoUsuario, String token)
+        {
+            try
+            {
+                String sp = "[dbo].[prc_validaSession]";
+                var dbParam = new DynamicParameters();
+                dbParam.Add("@codigoUsuario", codigoUsuario);
+                dbParam.Add("@token", token);
+                long idSession = _dapper.Get<long>(sp, dbParam, commandType: CommandType.StoredProcedure);
+                return idSession;
+            }
+            catch (Exception ex)
+            {
+                //logger.Error("Error al crear session ", ex);
+                GestionIspeccionException connectionFault = new GestionIspeccionException();
+                connectionFault.code = 4;
+                connectionFault.userMessage = ex.Message;
+                connectionFault.action = "Error al validar sesion (Dao): " + ex.Message;
+                throw connectionFault;
+            }
+        }
+
+        public BitacoraTO[] buscarBitacora(long idComplejo, long idCentral, String fechaInicio, String fechaFin)
         {
             try
             {
                 const string SP = "[dbo].[prc_obtieneReporteBitacoras]";
                 DynamicParameters dbParam = new DynamicParameters();
-                dbParam.Add("@i_id_complejo", request.idComplejo);
-                dbParam.Add("@i_id_central", request.idCentral);
-                dbParam.Add("@i_fecha_inicio", request.fechaInicio + " 00:00:00");
-                dbParam.Add("@i_fecha_fin", request.fechaFin + " 23:59:59");
+                dbParam.Add("@i_id_complejo", idComplejo);
+                dbParam.Add("@i_id_central", idCentral);
+                dbParam.Add("@i_fecha_inicio", fechaInicio + " 00:00:00");
+                dbParam.Add("@i_fecha_fin", fechaFin + " 23:59:59");
                 BitacoraTO[] result = _dapper.GetAll<BitacoraTO>(SP, dbParam, commandType: CommandType.StoredProcedure).ToArray();
                 return result;
             }
             catch (Exception ex)
             {
                 _logger.LogError("Error al buscar bitacora", ex);
-                GestionReporteException connectionFault = new GestionReporteException();
-                connectionFault.code = TiposErrores.CODE_ERROR_BUSCAR_BITACORA;
+                GestionIspeccionException connectionFault = new GestionIspeccionException();
+                connectionFault.code = TiposErrores.CODE_ERROR_OBTENER_BITACORA;
                 connectionFault.userMessage = ex.Message;
                 connectionFault.action = "Error al buscar bitacora (Dao): ";
                 throw connectionFault;
             }
         }
 
-        public RutaTO[] buscarRutas(RequestBuscarRutasBody request)
+        public RutaTO[] buscarRutas(int idComplejo, int idCentral, bool mant_ope, string estado, string fechaInicio, string fechaFin)
         {
             try
             {
                 const string SP = "[dbo].[prc_obtieneReporteRutas]";
                 var dbParam = new DynamicParameters();
-                dbParam.Add("@i_id_complejo", request.idComplejo);
-                dbParam.Add("@i_id_central", request.idCentral);
-                dbParam.Add("@i_fecha_inicio", request.fechaInicio + " 00:00:00");
-                dbParam.Add("@i_fecha_fin", request.fechaFin + " 23:59:59");
-                dbParam.Add("@i_mant_ope", request.mant_ope);
+                dbParam.Add("@i_id_complejo", idComplejo);
+                dbParam.Add("@i_id_central", idCentral);
+                dbParam.Add("@i_fecha_inicio", fechaInicio + " 00:00:00");
+                dbParam.Add("@i_fecha_fin", fechaFin + " 23:59:59");
+                dbParam.Add("@i_mant_ope", mant_ope);
 
-                if (string.IsNullOrWhiteSpace(request.estado))
+                if (string.IsNullOrWhiteSpace(estado))
                 {
                     dbParam.Add("@i_estado", DBNull.Value);
                 }
                 else
                 {
-                    dbParam.Add("@i_estado", request.estado);
+                    dbParam.Add("@i_estado", estado);
                 }
 
                 RutaTO[] result = _dapper.GetAll<RutaTO>(SP, dbParam, commandType: CommandType.StoredProcedure).ToArray();
@@ -66,16 +92,16 @@ namespace ris_reporte_rest.DAO
                 // Ahora, procesa el estado y asigna valores deseados
                 foreach (RutaTO rutaTO in result)
                 {
-                    string estado = rutaTO.estado;
-                    if ("INI".Equals(estado))
+                    string estadoRuta = rutaTO.estado;
+                    if ("INI".Equals(estadoRuta))
                     {
                         rutaTO.estado = "Iniciada";
                     }
-                    else if ("SIN".Equals(estado))
+                    else if ("SIN".Equals(estadoRuta))
                     {
                         rutaTO.estado = "Sincronizada";
                     }
-                    else if ("DES".Equals(estado))
+                    else if ("DES".Equals(estadoRuta))
                     {
                         rutaTO.estado = "Descartada";
                     }
@@ -90,8 +116,8 @@ namespace ris_reporte_rest.DAO
             catch (Exception ex)
             {
                 _logger.LogError("Error al buscar rutas", ex);
-                GestionReporteException connectionFault = new GestionReporteException();
-                connectionFault.code = TiposErrores.CODE_ERROR_BUSCAR_RUTAS_REPORTE;
+                GestionIspeccionException connectionFault = new GestionIspeccionException();
+                connectionFault.code = TiposErrores.CODE_ERROR_OBTENER_RUTAS_REPORTE;
                 connectionFault.userMessage = ex.Message;
                 connectionFault.action = "Error al buscar rutas (Dao): ";
                 throw connectionFault;
@@ -117,8 +143,8 @@ namespace ris_reporte_rest.DAO
             catch (Exception ex)
             {
                 _logger.LogError("Error al cargar puntos equipo", ex);
-                GestionReporteException connectionFault = new GestionReporteException();
-                connectionFault.code = TiposErrores.CODE_ERROR_CARGAR_PUNTOS_EQUIPO;
+                GestionIspeccionException connectionFault = new GestionIspeccionException();
+                connectionFault.code = TiposErrores.CODE_ERROR_GARGAR_PUNTOS_EQUIPO;
                 connectionFault.userMessage = ex.Message;
                 connectionFault.action = "Error al cargar puntos equipo (Dao): ";
                 throw connectionFault;
@@ -153,7 +179,7 @@ namespace ris_reporte_rest.DAO
             catch (Exception ex)
             {
                 _logger.LogError("Error al obtener lista cbx punto inspeccion", ex);
-                GestionReporteException connectionFault = new GestionReporteException();
+                GestionIspeccionException connectionFault = new GestionIspeccionException();
                 connectionFault.code = TiposErrores.CODE_ERROR_OBTENER_LISTA_CBX_PI;
                 connectionFault.userMessage = ex.Message;
                 connectionFault.action = "Error al obtener lista cbx punto inspeccion (Dao): ";
@@ -161,39 +187,39 @@ namespace ris_reporte_rest.DAO
             }
         }
 
-        public AlertaTO[] buscarAlertas(RequestBuscarAlertasBody request)
+        public AlertaTO[] buscarAlertas(long idComplejo, long idCentral, long idUsuario, long idEquipo, string fechaInicio, string fechaFin)
         {
             try
             {
                 const string SP = "[dbo].[prc_obtieneReporteAlertas]";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@i_id_complejo", request.idComplejo);
-                parameters.Add("@i_id_central", request.idCentral);
-                parameters.Add("@i_id_usuario", request.idUsuario);
-                parameters.Add("@i_id_equipo", request.idEquipo);
-                parameters.Add("@i_fecha_inicio", request.fechaInicio + " 00:00:00");
-                parameters.Add("@i_fecha_fin", request.fechaFin + " 23:59:59");
+                parameters.Add("@i_id_complejo", idComplejo);
+                parameters.Add("@i_id_central", idCentral);
+                parameters.Add("@i_id_usuario", idUsuario);
+                parameters.Add("@i_id_equipo", idEquipo);
+                parameters.Add("@i_fecha_inicio", fechaInicio + " 00:00:00");
+                parameters.Add("@i_fecha_fin", fechaFin + " 23:59:59");
                 AlertaTO[] result = _dapper.GetAll<AlertaTO>(SP, parameters, commandType: CommandType.StoredProcedure).ToArray();
                 return result;
             }
             catch (Exception ex)
             {
                 _logger.LogError("Error al buscar alertas", ex);
-                GestionReporteException connectionFault = new GestionReporteException();
-                connectionFault.code = TiposErrores.CODE_ERROR_BUSCAR_ALERTAS;
+                GestionIspeccionException connectionFault = new GestionIspeccionException();
+                connectionFault.code = TiposErrores.CODE_ERROR_OBTENER_ALERTAS;
                 connectionFault.userMessage = ex.Message;
                 connectionFault.action = "Error al buscar alertas (Dao): ";
                 throw connectionFault;
             }
         }
 
-        public ResponseBuscarDetalleRuta buscarDetalleRuta(RequestBuscarDetalleRutaBody request)
+        public ResponseBuscarDetalleRuta buscarDetalleRuta(long idEjecucion)
         {
             try
             {
                 const string SP = "[dbo].[prc_obtieneReporteRutasDetalle]";
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@i_idEjecucionRuta", request.idEjecucion);
+                parameters.Add("@i_idEjecucionRuta", idEjecucion);
                 PuntoInspeccionTemporalTO[] listaPtoWS = _dapper.GetAll<PuntoInspeccionTemporalTO>(SP, parameters, commandType: CommandType.StoredProcedure).ToArray();
                 Dictionary<long, ValoresEquipoTO> dicEquipos = new Dictionary<long, ValoresEquipoTO>();
                 foreach (PuntoInspeccionTemporalTO puntoWS in listaPtoWS)
@@ -230,31 +256,31 @@ namespace ris_reporte_rest.DAO
             catch (Exception ex)
             {
                 _logger.LogError("Error al buscar detalle ruta", ex);
-                GestionReporteException connectionFault = new GestionReporteException();
-                connectionFault.code = TiposErrores.CODE_ERROR_BUSCAR_DETALLE_RUTA;
+                GestionIspeccionException connectionFault = new GestionIspeccionException();
+                connectionFault.code = TiposErrores.CODE_ERROR_OBTENER_DETALLE_RUTA;
                 connectionFault.userMessage = ex.Message;
                 connectionFault.action = "Error al buscar detalle ruta (Dao): ";
                 throw connectionFault;
             }
         }
 
-        public ResponseBuscarHistoriaEquipo buscarHistoriaEquipo(RequestBuscarHistoriaEquipoBody request)
+        public ResponseBuscarHistoriaEquipo buscarHistoriaEquipo(long idComplejo, long idCentral, long idRuta, long idEquipo, string fechaInicio, string fechaFin, bool var_critica)
         {
             try
             {
                 const string SP = "[dbo].[prc_obtieneReporteEquipos]";
                 ResponseBuscarHistoriaEquipo response = new ResponseBuscarHistoriaEquipo();
-                CbxTO[] listaPuntos = obtieneListaCbxPuntoInspeccion(request.idEquipo);
+                CbxTO[] listaPuntos = obtieneListaCbxPuntoInspeccion(idEquipo);
                 response.listaPuntosHeader = listaPuntos;
                 // Utilizar Dapper para obtener el reporte de equipos
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@i_id_complejo", request.idComplejo);
-                parameters.Add("@i_id_central", request.idCentral);
-                parameters.Add("@i_id_ruta", request.idRuta);
-                parameters.Add("@i_id_equipo", request.idEquipo);
-                parameters.Add("@i_fecha_inicio", request.fechaInicio + " 00:00:00");
-                parameters.Add("@i_fecha_fin", request.fechaFin + " 23:59:59");
-                parameters.Add("@i_criticoMantenedor", request.var_critica);
+                parameters.Add("@i_id_complejo", idComplejo);
+                parameters.Add("@i_id_central", idCentral);
+                parameters.Add("@i_id_ruta", idRuta);
+                parameters.Add("@i_id_equipo", idEquipo);
+                parameters.Add("@i_fecha_inicio", fechaInicio + " 00:00:00");
+                parameters.Add("@i_fecha_fin", fechaFin + " 23:59:59");
+                parameters.Add("@i_criticoMantenedor", var_critica);
                 ReporteEquipoTO[] listaEquipos = _dapper.GetAll<ReporteEquipoTO>(SP, parameters, CommandType.StoredProcedure).ToArray();
                 Dictionary<String, InspeccionEquipoTO> dicInspeccion = new Dictionary<string, InspeccionEquipoTO>();
                 InspeccionEquipoTO inspeccionEquipoTO = null;
@@ -287,8 +313,8 @@ namespace ris_reporte_rest.DAO
             catch (Exception ex)
             {
                 _logger.LogError("Error al buscar historia equipo", ex);
-                GestionReporteException connectionFault = new GestionReporteException();
-                connectionFault.code = TiposErrores.CODE_ERROR_BUSCAR_HISTORIA_EQUIPO;
+                GestionIspeccionException connectionFault = new GestionIspeccionException();
+                connectionFault.code = TiposErrores.CODE_ERROR_OBTENER_HISTORIA_EQUIPO;
                 connectionFault.userMessage = ex.Message;
                 connectionFault.action = "Error al buscar historia equipo (Dao): ";
                 throw connectionFault;

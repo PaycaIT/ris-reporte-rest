@@ -1,6 +1,6 @@
 ﻿using System.ServiceModel;
 
-namespace ris_reporte_rest.Models
+namespace ris_reporte_rest.Models.TO
 {
     [MessageContract]
     public class Header

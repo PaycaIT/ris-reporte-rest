@@ -3,13 +3,14 @@
     public class TiposErrores
     {
         public const int CODE_ERROR_NO_CONTROLADO = -1;
-
-        public const int CODE_ERROR_BUSCAR_BITACORA = 80000;
-        public const int CODE_ERROR_BUSCAR_RUTAS_REPORTE = 80001;
-        public const int CODE_ERROR_CARGAR_PUNTOS_EQUIPO = 80002;
-        public const int CODE_ERROR_OBTENER_LISTA_CBX_PI = 80003;
-        public const int CODE_ERROR_BUSCAR_ALERTAS = 80004;
-        public const int CODE_ERROR_BUSCAR_DETALLE_RUTA = 80005;
-        public const int CODE_ERROR_BUSCAR_HISTORIA_EQUIPO = 80006;
+        public const int CODE_ERROR_SESION_NO_VALIDA_EXCEPCION = 85001;
+        public const int CODE_ERROR_SESION_NO_VALIDA_EXPIRADA = 85002;
+        public const int CODE_ERROR_OBTENER_BITACORA = 85003;
+        public const int CODE_ERROR_OBTENER_RUTAS_REPORTE = 85004;
+        public const int CODE_ERROR_OBTENER_LISTA_CBX_PI = 85005;
+        public const int CODE_ERROR_OBTENER_ALERTAS = 85006;
+        public const int CODE_ERROR_OBTENER_DETALLE_RUTA = 85007;
+        public const int CODE_ERROR_OBTENER_HISTORIA_EQUIPO = 85008;
+        public const int CODE_ERROR_GARGAR_PUNTOS_EQUIPO = 85009;
     }
 }

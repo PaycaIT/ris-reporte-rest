@@ -28,9 +28,6 @@ namespace ris_reporte_rest
                        .AllowAnyHeader();
             }));
 
-            // BD
-            services.AddDbContext<DataContext.AppContext>(options =>
-                          options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             //Register dapper in scope    
             services.AddScoped<IDapper, DataAccess.Dapper>();
 
