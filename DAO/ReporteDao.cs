@@ -3,6 +3,7 @@ using ris_reporte_rest.DataAccess;
 using ris_reporte_rest.Exceptions;
 using ris_reporte_rest.Models.Responses;
 using ris_reporte_rest.Models.TO;
+using System.Collections.Generic;
 using System.Data;
 
 namespace ris_reporte_rest.DAO
@@ -41,7 +42,7 @@ namespace ris_reporte_rest.DAO
             }
         }
 
-        public BitacoraTO[] buscarBitacora(long idComplejo, long idCentral, String fechaInicio, String fechaFin)
+        public List<BitacoraTO> buscarBitacora(long idComplejo, long idCentral, String fechaInicio, String fechaFin)
         {
             try
             {
@@ -51,7 +52,7 @@ namespace ris_reporte_rest.DAO
                 dbParam.Add("@i_id_central", idCentral);
                 dbParam.Add("@i_fecha_inicio", fechaInicio + " 00:00:00");
                 dbParam.Add("@i_fecha_fin", fechaFin + " 23:59:59");
-                BitacoraTO[] result = _dapper.GetAll<BitacoraTO>(SP, dbParam, commandType: CommandType.StoredProcedure).ToArray();
+                List<BitacoraTO> result = _dapper.GetAll<BitacoraTO>(SP, dbParam, commandType: CommandType.StoredProcedure);
                 return result;
             }
             catch (Exception ex)
@@ -65,7 +66,7 @@ namespace ris_reporte_rest.DAO
             }
         }
 
-        public RutaTO[] buscarRutas(int idComplejo, int idCentral, bool mant_ope, string estado, string fechaInicio, string fechaFin)
+        public List<RutaTO> buscarRutas(int idComplejo, int idCentral, bool mant_ope, string estado, string fechaInicio, string fechaFin)
         {
             try
             {
@@ -86,7 +87,7 @@ namespace ris_reporte_rest.DAO
                     dbParam.Add("@i_estado", estado);
                 }
 
-                RutaTO[] result = _dapper.GetAll<RutaTO>(SP, dbParam, commandType: CommandType.StoredProcedure).ToArray();
+                List<RutaTO> result = _dapper.GetAll<RutaTO>(SP, dbParam, commandType: CommandType.StoredProcedure);
 
                 // Ahora, procesa el estado y asigna valores deseados
                 foreach (RutaTO rutaTO in result)
@@ -186,7 +187,7 @@ namespace ris_reporte_rest.DAO
             }
         }
 
-        public AlertaTO[] buscarAlertas(long idComplejo, long idCentral, long idUsuario, long idEquipo, string fechaInicio, string fechaFin)
+        public List<AlertaTO> buscarAlertas(long idComplejo, long idCentral, long idUsuario, long idEquipo, string fechaInicio, string fechaFin)
         {
             try
             {
@@ -198,7 +199,7 @@ namespace ris_reporte_rest.DAO
                 parameters.Add("@i_id_equipo", idEquipo);
                 parameters.Add("@i_fecha_inicio", fechaInicio + " 00:00:00");
                 parameters.Add("@i_fecha_fin", fechaFin + " 23:59:59");
-                AlertaTO[] result = _dapper.GetAll<AlertaTO>(SP, parameters, commandType: CommandType.StoredProcedure).ToArray();
+                List<AlertaTO> result = _dapper.GetAll<AlertaTO>(SP, parameters, commandType: CommandType.StoredProcedure);
                 return result;
             }
             catch (Exception ex)
