@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ris_reporte_rest.DAO;
 using ris_reporte_rest.DataAccess;
 using ris_reporte_rest.Exceptions;
+using ris_reporte_rest.Helper;
 using ris_reporte_rest.Models.Requests;
 using ris_reporte_rest.Models.Responses;
 using ris_reporte_rest.Models.TO;
@@ -21,29 +22,26 @@ namespace ris_reporte_rest.Controllers
         private readonly IDapper _dapper;
         private readonly IConfiguration _config;
         private readonly ILoggerManager _logger;
-        private ReporteDao dao;
+        private ReporteHelper helper;
         public ReporteController(IConfiguration config, IDapper dapper, ILoggerManager logger)
         {
             this._config = config;
             this._dapper = dapper;
             this._logger = logger;
-            Configuration = config;
-            this.dao = new ReporteDao(dapper, logger);
+            this.helper = new ReporteHelper(dapper, logger);
         }
-        public IConfiguration Configuration { get; }
+        
         [Route("obtenerBitacora")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public IActionResult obtenerBitacora([FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
+        public IActionResult obtenerBitacora([FromQuery] long idComplejo, [FromQuery] long idCentral, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
         {
-            _logger.LogInformation("obtenerBitacora inició...");
             ResponseBuscarBitacora response = new ResponseBuscarBitacora();
             try
             {
-                RequestBuscarBitacoraBody request = new RequestBuscarBitacoraBody { idComplejo = idComplejo, idCentral = idCentral, fechaInicio = fechaInicio, fechaFin = fechaFin };
-                response.listaBitacora = dao.buscarBitacora(request);
+                response.listaBitacora = helper.buscarBitacora(idComplejo, idCentral, fechaInicio, fechaFin);
             }
-            catch (GestionReporteException ex)
+            catch (GestionIspeccionException ex)
             {
                 this._logger.LogError("Error en obtenerBitacora: " + ex.action, ex);
                 if (ex.code == TiposErrores.CODE_ERROR_SESION_NO_VALIDA_EXCEPCION || ex.code == TiposErrores.CODE_ERROR_SESION_NO_VALIDA_EXPIRADA)
@@ -69,14 +67,13 @@ namespace ris_reporte_rest.Controllers
         [EnableCors("MyPolicy")]
         public IActionResult obtenerRutas([FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] bool mant_ope, [FromQuery] string estado, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
         {
-            _logger.LogInformation("obtenerRutas inició...");
             ResponseBuscarRutas response = new ResponseBuscarRutas();
             try
             {
-                RequestBuscarRutasBody request = new RequestBuscarRutasBody { idComplejo = idComplejo, idCentral = idCentral, mant_ope = mant_ope, estado = estado, fechaInicio = fechaInicio, fechaFin = fechaFin };
-                response.listaRutas = dao.buscarRutas(request);
+                
+                response.listaRutas = helper.buscarRutas(idComplejo, idCentral, mant_ope, estado, fechaInicio, fechaFin);
             }
-            catch (GestionReporteException ex)
+            catch (GestionIspeccionException ex)
             {
                 this._logger.LogError("Error en obtenerRutas: " + ex.action, ex);
                 if (ex.code == TiposErrores.CODE_ERROR_SESION_NO_VALIDA_EXCEPCION || ex.code == TiposErrores.CODE_ERROR_SESION_NO_VALIDA_EXPIRADA)
@@ -100,16 +97,15 @@ namespace ris_reporte_rest.Controllers
         [Route("obtenerAlertas")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public IActionResult obtenerAlertas([FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] long idUsuario, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
+        public IActionResult obtenerAlertas([FromQuery] long idComplejo, [FromQuery] long idCentral, [FromQuery] long idUsuario, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
         {
-            _logger.LogInformation("obtenerAlertas inició...");
             ResponseBuscarAlertas response = new ResponseBuscarAlertas();
             try
             {
-                RequestBuscarAlertasBody request = new RequestBuscarAlertasBody { idComplejo = idComplejo, idCentral = idCentral, idUsuario = idUsuario, idEquipo = idEquipo, fechaInicio = fechaInicio, fechaFin = fechaFin };
-                response.listaAlertas = dao.buscarAlertas(request);
+                
+                response.listaAlertas = helper.buscarAlertas(idComplejo, idCentral, idUsuario, idEquipo, fechaInicio, fechaFin);
             }
-            catch (GestionReporteException ex)
+            catch (GestionIspeccionException ex)
             {
                 this._logger.LogError("Error en obtenerAlertas: " + ex.action, ex);
                 if (ex.code == TiposErrores.CODE_ERROR_SESION_NO_VALIDA_EXCEPCION || ex.code == TiposErrores.CODE_ERROR_SESION_NO_VALIDA_EXPIRADA)
@@ -133,16 +129,14 @@ namespace ris_reporte_rest.Controllers
         [Route("obtenerDetalleRuta")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public IActionResult obtenerDetalleRuta([FromQuery] int idEjecucion)
+        public IActionResult obtenerDetalleRuta([FromQuery] long idEjecucion)
         {
-            _logger.LogInformation("obtenerDetalleRuta inició...");
             ResponseBuscarDetalleRuta response = new ResponseBuscarDetalleRuta();
             try
             {
-                RequestBuscarDetalleRutaBody request = new RequestBuscarDetalleRutaBody { idEjecucion = idEjecucion };
-                response = dao.buscarDetalleRuta(request);
+                response = helper.buscarDetalleRuta(idEjecucion);
             }
-            catch (GestionReporteException ex)
+            catch (GestionIspeccionException ex)
             {
                 this._logger.LogError("Error en obtenerDetalleRuta: " + ex.action, ex);
                 if (ex.code == TiposErrores.CODE_ERROR_SESION_NO_VALIDA_EXCEPCION || ex.code == TiposErrores.CODE_ERROR_SESION_NO_VALIDA_EXPIRADA)
@@ -169,14 +163,12 @@ namespace ris_reporte_rest.Controllers
         [EnableCors("MyPolicy")]
         public IActionResult obtenerHistoriaEquipo([FromQuery] long idComplejo, [FromQuery] long idCentral, [FromQuery] long idRuta, [FromQuery] long idEquipo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin, [FromQuery] bool var_critica)
         {
-            _logger.LogInformation("obtenerHistoriaEquipo inició...");
             ResponseBuscarHistoriaEquipo response = new ResponseBuscarHistoriaEquipo();
             try
             {
-                RequestBuscarHistoriaEquipoBody request = new RequestBuscarHistoriaEquipoBody { idComplejo = idComplejo, idCentral = idCentral, idRuta = idRuta, idEquipo = idEquipo, fechaInicio = fechaInicio, fechaFin = fechaFin, var_critica = var_critica };
-                response = dao.buscarHistoriaEquipo(request);
+                response = helper.buscarHistoriaEquipo(idComplejo, idCentral, idRuta, idEquipo, fechaInicio, fechaFin, var_critica);
             }
-            catch (GestionReporteException ex)
+            catch (GestionIspeccionException ex)
             {
                 this._logger.LogError("Error en obtenerHistoriaEquipo: " + ex.action, ex);
                 if (ex.code == TiposErrores.CODE_ERROR_SESION_NO_VALIDA_EXCEPCION || ex.code == TiposErrores.CODE_ERROR_SESION_NO_VALIDA_EXPIRADA)
