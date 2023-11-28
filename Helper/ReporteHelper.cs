@@ -42,12 +42,12 @@ namespace ris_reporte_rest.Helper
             }
         }
 
-        public AlertaTO[] buscarAlertas(long idComplejo, long idCentral, long idUsuario, long idEquipo, string fechaInicio, string fechaFin)
+        public List<AlertaTO> buscarAlertas(long idComplejo, long idCentral, long idUsuario, long idEquipo, string fechaInicio, string fechaFin)
         {
             return dao.buscarAlertas(idComplejo, idCentral, idUsuario, idEquipo, fechaInicio, fechaFin);
         }
 
-        public BitacoraTO[] buscarBitacora(long idComplejo, long idCentral, String fechaInicio, String fechaFin)
+        public List<BitacoraTO> buscarBitacora(long idComplejo, long idCentral, String fechaInicio, String fechaFin)
         {
             return dao.buscarBitacora(idComplejo, idCentral, fechaInicio, fechaFin);
         }
@@ -62,7 +62,7 @@ namespace ris_reporte_rest.Helper
             return dao.buscarHistoriaEquipo(idComplejo, idCentral, idRuta, idEquipo, fechaInicio, fechaFin, var_critica);
         }
 
-        public RutaTO[] buscarRutas(int idComplejo, int idCentral, bool mant_ope, string estado, string fechaInicio, string fechaFin)
+        public List<RutaTO> buscarRutas(int idComplejo, int idCentral, bool mant_ope, string estado, string fechaInicio, string fechaFin)
         {
             return dao.buscarRutas(idComplejo, idCentral, mant_ope, estado, fechaInicio, fechaFin);
         }
