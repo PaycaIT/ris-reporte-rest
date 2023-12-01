@@ -80,7 +80,7 @@ namespace ris_reporte_rest.DAO
 
                 if (string.IsNullOrWhiteSpace(estado))
                 {
-                    dbParam.Add("@i_estado", DBNull.Value);
+                    dbParam.Add("@i_estado", null);
                 }
                 else
                 {

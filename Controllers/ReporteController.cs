@@ -65,7 +65,7 @@ namespace ris_reporte_rest.Controllers
         [Route("obtenerRutas")]
         [HttpGet] // Cambia a [HttpGet]
         [EnableCors("MyPolicy")]
-        public IActionResult obtenerRutas([FromHeader] String codigoUsuario, [FromHeader] String token, [FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] bool mant_ope, [FromQuery] string estado, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
+        public IActionResult obtenerRutas([FromHeader] String codigoUsuario, [FromHeader] String token, [FromQuery] int idComplejo, [FromQuery] int idCentral, [FromQuery] bool mant_ope, [FromQuery] string? estado, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
         {
             ResponseBuscarRutas response = new ResponseBuscarRutas();
             try
