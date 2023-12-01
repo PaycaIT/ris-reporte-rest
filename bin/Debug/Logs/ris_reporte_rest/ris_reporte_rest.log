@@ -1,0 +1,16 @@
+2023-12-01 14:06:59,952 [5] ERROR ris_reporte_rest.LoggerManager [(null)] - Error al buscar rutas
+System.NotSupportedException: The member i_estado of type System.DBNull cannot be used as a parameter value
+   at Dapper.SqlMapper.LookupDbType(Type type, String name, Boolean demand, ITypeHandler& handler) in /_/Dapper/SqlMapper.cs:line 495
+   at Dapper.DynamicParameters.AddParameters(IDbCommand command, Identity identity) in /_/Dapper/DynamicParameters.cs:line 238
+   at Dapper.CommandDefinition.SetupCommand(IDbConnection cnn, Action`2 paramReader) in /_/Dapper/CommandDefinition.cs:line 129
+   at Dapper.SqlMapper.QueryImpl[T](IDbConnection cnn, CommandDefinition command, Type effectiveType)+MoveNext() in /_/Dapper/SqlMapper.cs:line 1179
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType) in /_/Dapper/SqlMapper.cs:line 813
+   at ris_reporte_rest.DataAccess.Dapper.GetAll[T](String sp, DynamicParameters parms, CommandType commandType) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DataAccess\Dapper.cs:line 37
+   at ris_reporte_rest.DAO.ReporteDao.buscarRutas(Int32 idComplejo, Int32 idCentral, Boolean mant_ope, String estado, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DAO\ReporteDao.cs:line 90
+2023-12-01 14:07:00,302 [5] ERROR ris_reporte_rest.LoggerManager [(null)] - Error en obtenerRutas: Error al buscar rutas (Dao): 
+ris_reporte_rest.Exceptions.GestionIspeccionException: Exception of type 'ris_reporte_rest.Exceptions.GestionIspeccionException' was thrown.
+   at ris_reporte_rest.DAO.ReporteDao.buscarRutas(Int32 idComplejo, Int32 idCentral, Boolean mant_ope, String estado, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DAO\ReporteDao.cs:line 123
+   at ris_reporte_rest.Helper.ReporteHelper.buscarRutas(Int32 idComplejo, Int32 idCentral, Boolean mant_ope, String estado, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Helper\ReporteHelper.cs:line 67
+   at ris_reporte_rest.Controllers.ReporteController.obtenerRutas(String codigoUsuario, String token, Int32 idComplejo, Int32 idCentral, Boolean mant_ope, String estado, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Controllers\ReporteController.cs:line 74
