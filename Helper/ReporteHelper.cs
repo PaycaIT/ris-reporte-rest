@@ -66,5 +66,15 @@ namespace ris_reporte_rest.Helper
         {
             return dao.buscarRutas(idComplejo, idCentral, mant_ope, estado, fechaInicio, fechaFin);
         }
+
+        public ResponseObtenerDashboardResumen obtenerDashboardResumen(long idComplejo, string fechaInicio, string fechaFin)
+        {
+            ResponseObtenerDashboardResumen response = new ResponseObtenerDashboardResumen();
+            response.cantidadAlertasEnviadas = 10;
+            response.cantidadRutasEjecutadas = 12;
+            response.cantidadAnomalias = 15;
+            response.cantidadEquiposInspeccionados = 547;
+            return response;
+        }
     }
 }
