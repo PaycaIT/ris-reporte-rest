@@ -190,5 +190,40 @@ namespace ris_reporte_rest.Controllers
 
             return StatusCode((int)HttpStatusCode.OK, response);
         }
+
+
+
+        [Route("obtenerDashboardResumen")]
+        [HttpGet] // Cambia a [HttpGet]
+        [EnableCors("MyPolicy")]
+        public IActionResult obtenerDashboardResumen([FromHeader] String codigoUsuario, [FromHeader] String token, [FromQuery] long idComplejo, [FromQuery] string fechaInicio, [FromQuery] string fechaFin)
+        {
+            ResponseObtenerDashboardResumen response;
+            try
+            {
+                helper.validarSession(codigoUsuario, token);
+                response = helper.obtenerDashboardResumen(idComplejo, fechaInicio, fechaFin);
+                return StatusCode((int)HttpStatusCode.OK, response);
+            }
+            catch (GestionIspeccionException ex)
+            {
+                this._logger.LogError("Error en obtenerDashboardResumen: " + ex.action, ex);
+                if (ex.code == TiposErrores.CODE_ERROR_SESION_NO_VALIDA_EXCEPCION || ex.code == TiposErrores.CODE_ERROR_SESION_NO_VALIDA_EXPIRADA)
+                {
+                    return StatusCode((int)HttpStatusCode.Unauthorized, new ErrorTO(ex.code, ex.userMessage));
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorTO(ex.code, ex.userMessage));
+                }
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError("Error en obtenerDashboardResumen: " + ex.Message, ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ErrorTO(TiposErrores.CODE_ERROR_NO_CONTROLADO, ex.Message));
+            }
+
+            
+        }
     }
 }

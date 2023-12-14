@@ -1,16 +1,92 @@
-2023-12-01 14:06:59,952 [5] ERROR ris_reporte_rest.LoggerManager [(null)] - Error al buscar rutas
-System.NotSupportedException: The member i_estado of type System.DBNull cannot be used as a parameter value
-   at Dapper.SqlMapper.LookupDbType(Type type, String name, Boolean demand, ITypeHandler& handler) in /_/Dapper/SqlMapper.cs:line 495
-   at Dapper.DynamicParameters.AddParameters(IDbCommand command, Identity identity) in /_/Dapper/DynamicParameters.cs:line 238
-   at Dapper.CommandDefinition.SetupCommand(IDbConnection cnn, Action`2 paramReader) in /_/Dapper/CommandDefinition.cs:line 129
-   at Dapper.SqlMapper.QueryImpl[T](IDbConnection cnn, CommandDefinition command, Type effectiveType)+MoveNext() in /_/Dapper/SqlMapper.cs:line 1179
+2023-12-04 13:32:59,225 [5] ERROR ris_reporte_rest.LoggerManager [(null)] - Error en obtenerAlertas: Excepción al validar sesión: Exception of type 'ris_reporte_rest.Exceptions.GestionIspeccionException' was thrown.
+ris_reporte_rest.Exceptions.GestionIspeccionException: Exception of type 'ris_reporte_rest.Exceptions.GestionIspeccionException' was thrown.
+   at ris_reporte_rest.Helper.ReporteHelper.validarSession(String codigoUsuario, String token) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Helper\ReporteHelper.cs:line 32
+   at ris_reporte_rest.Controllers.ReporteController.obtenerAlertas(String codigoUsuario, String token, Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Controllers\ReporteController.cs:line 105
+2023-12-04 13:38:05,350 [21] ERROR ris_reporte_rest.LoggerManager [(null)] - Error en obtenerAlertas: Excepción al validar sesión: Exception of type 'ris_reporte_rest.Exceptions.GestionIspeccionException' was thrown.
+ris_reporte_rest.Exceptions.GestionIspeccionException: Exception of type 'ris_reporte_rest.Exceptions.GestionIspeccionException' was thrown.
+   at ris_reporte_rest.Helper.ReporteHelper.validarSession(String codigoUsuario, String token) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Helper\ReporteHelper.cs:line 32
+   at ris_reporte_rest.Controllers.ReporteController.obtenerAlertas(String codigoUsuario, String token, Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Controllers\ReporteController.cs:line 105
+2023-12-04 13:55:29,240 [21] ERROR ris_reporte_rest.LoggerManager [(null)] - Error al buscar alertas
+System.Data.SqlClient.SqlException (0x80131904): Error converting data type varchar to bigint.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at System.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at System.Data.SqlClient.SqlDataReader.Read()
+   at Dapper.SqlMapper.QueryImpl[T](IDbConnection cnn, CommandDefinition command, Type effectiveType)+MoveNext() in /_/Dapper/SqlMapper.cs:line 1199
    at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
    at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
    at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType) in /_/Dapper/SqlMapper.cs:line 813
    at ris_reporte_rest.DataAccess.Dapper.GetAll[T](String sp, DynamicParameters parms, CommandType commandType) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DataAccess\Dapper.cs:line 37
-   at ris_reporte_rest.DAO.ReporteDao.buscarRutas(Int32 idComplejo, Int32 idCentral, Boolean mant_ope, String estado, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DAO\ReporteDao.cs:line 90
-2023-12-01 14:07:00,302 [5] ERROR ris_reporte_rest.LoggerManager [(null)] - Error en obtenerRutas: Error al buscar rutas (Dao): 
+   at ris_reporte_rest.DAO.ReporteDao.buscarAlertas(Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DAO\ReporteDao.cs:line 202
+ClientConnectionId:ff7ac1de-c75d-4cbd-8625-9b4472124454
+Error Number:8114,State:5,Class:16
+2023-12-04 13:55:34,922 [21] ERROR ris_reporte_rest.LoggerManager [(null)] - Error en obtenerAlertas: Error al buscar alertas (Dao): 
 ris_reporte_rest.Exceptions.GestionIspeccionException: Exception of type 'ris_reporte_rest.Exceptions.GestionIspeccionException' was thrown.
-   at ris_reporte_rest.DAO.ReporteDao.buscarRutas(Int32 idComplejo, Int32 idCentral, Boolean mant_ope, String estado, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DAO\ReporteDao.cs:line 123
-   at ris_reporte_rest.Helper.ReporteHelper.buscarRutas(Int32 idComplejo, Int32 idCentral, Boolean mant_ope, String estado, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Helper\ReporteHelper.cs:line 67
-   at ris_reporte_rest.Controllers.ReporteController.obtenerRutas(String codigoUsuario, String token, Int32 idComplejo, Int32 idCentral, Boolean mant_ope, String estado, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Controllers\ReporteController.cs:line 74
+   at ris_reporte_rest.DAO.ReporteDao.buscarAlertas(Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DAO\ReporteDao.cs:line 212
+   at ris_reporte_rest.Helper.ReporteHelper.buscarAlertas(Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Helper\ReporteHelper.cs:line 47
+   at ris_reporte_rest.Controllers.ReporteController.obtenerAlertas(String codigoUsuario, String token, Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Controllers\ReporteController.cs:line 106
+2023-12-04 13:55:34,922 [24] ERROR ris_reporte_rest.LoggerManager [(null)] - Error al buscar alertas
+System.Data.SqlClient.SqlException (0x80131904): Error converting data type varchar to bigint.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at System.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at System.Data.SqlClient.SqlDataReader.Read()
+   at Dapper.SqlMapper.QueryImpl[T](IDbConnection cnn, CommandDefinition command, Type effectiveType)+MoveNext() in /_/Dapper/SqlMapper.cs:line 1199
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType) in /_/Dapper/SqlMapper.cs:line 813
+   at ris_reporte_rest.DataAccess.Dapper.GetAll[T](String sp, DynamicParameters parms, CommandType commandType) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DataAccess\Dapper.cs:line 37
+   at ris_reporte_rest.DAO.ReporteDao.buscarAlertas(Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DAO\ReporteDao.cs:line 202
+ClientConnectionId:ff7ac1de-c75d-4cbd-8625-9b4472124454
+Error Number:8114,State:5,Class:16
+2023-12-04 13:55:35,002 [24] ERROR ris_reporte_rest.LoggerManager [(null)] - Error en obtenerAlertas: Error al buscar alertas (Dao): 
+ris_reporte_rest.Exceptions.GestionIspeccionException: Exception of type 'ris_reporte_rest.Exceptions.GestionIspeccionException' was thrown.
+   at ris_reporte_rest.DAO.ReporteDao.buscarAlertas(Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DAO\ReporteDao.cs:line 212
+   at ris_reporte_rest.Helper.ReporteHelper.buscarAlertas(Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Helper\ReporteHelper.cs:line 47
+   at ris_reporte_rest.Controllers.ReporteController.obtenerAlertas(String codigoUsuario, String token, Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Controllers\ReporteController.cs:line 106
+2023-12-04 13:55:51,409 [39] ERROR ris_reporte_rest.LoggerManager [(null)] - Error al buscar alertas
+System.Data.SqlClient.SqlException (0x80131904): Error converting data type varchar to bigint.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at System.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at System.Data.SqlClient.SqlDataReader.Read()
+   at Dapper.SqlMapper.QueryImpl[T](IDbConnection cnn, CommandDefinition command, Type effectiveType)+MoveNext() in /_/Dapper/SqlMapper.cs:line 1199
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType) in /_/Dapper/SqlMapper.cs:line 813
+   at ris_reporte_rest.DataAccess.Dapper.GetAll[T](String sp, DynamicParameters parms, CommandType commandType) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DataAccess\Dapper.cs:line 37
+   at ris_reporte_rest.DAO.ReporteDao.buscarAlertas(Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DAO\ReporteDao.cs:line 202
+ClientConnectionId:ff7ac1de-c75d-4cbd-8625-9b4472124454
+Error Number:8114,State:5,Class:16
+2023-12-04 13:55:51,485 [39] ERROR ris_reporte_rest.LoggerManager [(null)] - Error en obtenerAlertas: Error al buscar alertas (Dao): 
+ris_reporte_rest.Exceptions.GestionIspeccionException: Exception of type 'ris_reporte_rest.Exceptions.GestionIspeccionException' was thrown.
+   at ris_reporte_rest.DAO.ReporteDao.buscarAlertas(Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DAO\ReporteDao.cs:line 212
+   at ris_reporte_rest.Helper.ReporteHelper.buscarAlertas(Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Helper\ReporteHelper.cs:line 47
+   at ris_reporte_rest.Controllers.ReporteController.obtenerAlertas(String codigoUsuario, String token, Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Controllers\ReporteController.cs:line 106
+2023-12-04 14:00:19,818 [34] ERROR ris_reporte_rest.LoggerManager [(null)] - Error al buscar alertas
+System.Data.SqlClient.SqlException (0x80131904): Error converting data type varchar to bigint.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at System.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at System.Data.SqlClient.SqlDataReader.Read()
+   at Dapper.SqlMapper.QueryImpl[T](IDbConnection cnn, CommandDefinition command, Type effectiveType)+MoveNext() in /_/Dapper/SqlMapper.cs:line 1199
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType) in /_/Dapper/SqlMapper.cs:line 813
+   at ris_reporte_rest.DataAccess.Dapper.GetAll[T](String sp, DynamicParameters parms, CommandType commandType) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DataAccess\Dapper.cs:line 37
+   at ris_reporte_rest.DAO.ReporteDao.buscarAlertas(Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DAO\ReporteDao.cs:line 202
+ClientConnectionId:ff7ac1de-c75d-4cbd-8625-9b4472124454
+Error Number:8114,State:5,Class:16
+2023-12-04 14:00:19,882 [34] ERROR ris_reporte_rest.LoggerManager [(null)] - Error en obtenerAlertas: Error al buscar alertas (Dao): 
+ris_reporte_rest.Exceptions.GestionIspeccionException: Exception of type 'ris_reporte_rest.Exceptions.GestionIspeccionException' was thrown.
+   at ris_reporte_rest.DAO.ReporteDao.buscarAlertas(Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\DAO\ReporteDao.cs:line 212
+   at ris_reporte_rest.Helper.ReporteHelper.buscarAlertas(Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Helper\ReporteHelper.cs:line 47
+   at ris_reporte_rest.Controllers.ReporteController.obtenerAlertas(String codigoUsuario, String token, Int64 idComplejo, Int64 idCentral, Int64 idUsuario, Int64 idEquipo, String fechaInicio, String fechaFin) in C:\payca\clientes\payca\RIS\workspaces\webServices\ris-reporte-rest\Controllers\ReporteController.cs:line 106
