@@ -47,7 +47,7 @@ jobs:
         run: az login --service-principal -u "${{ vars.AZURE_SP_APPID_QA }}" -p "${{ secrets.AZURE_SP_PASS_QA }}" --tenant "${{ vars.AZURE_SP_TNT_QA }}"
         
       - name: Set Azure environment variables
-        run: az webapp config appsettings set --resource-group group-qa-ris-reporte-rest --name ${{ vars.AZURE_NAME_APP_QA }} --settings "DDBB_SERVER=${{ vars.DDBB_SERVER_QA }}" "DDBB_USER=${{ secrets.DDBB_USER_QA }}" "DDBB_PASS=${{ secrets.DDBB_PASS_QA }}"
+        run: az webapp config appsettings set --resource-group ${{ vars.AZURE_GROUP_APP_QA }} --name ${{ vars.AZURE_NAME_APP_QA }} --settings "DDBB_SERVER=${{ vars.DDBB_SERVER_QA }}" "DDBB_USER=${{ secrets.DDBB_USER_QA }}" "DDBB_PASS=${{ secrets.DDBB_PASS_QA }}"
       
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
